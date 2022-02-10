@@ -3,6 +3,7 @@ import puppeteer from "puppeteer"
 import chrome from "chrome-aws-lambda"
 import { scrollPageToBottom } from "puppeteer-autoscroll-down"
 import { v4 as uuidv4 } from 'uuid'
+import * as path from "path"
 
 
 
@@ -35,7 +36,7 @@ export const sendScreenShot = async (req: Request, res: Response): Promise<any> 
         let imageName = uuidv4()
         await page.screenshot({ path: `public/${imageName}.png`, fullPage: true });
         await browser.close()
-        return res.sendFile(`D:\\code-space\\browser-automation\\public\\${imageName}.png`)
+        return res.sendFile(path.join(__dirname, "..", "..", "..", "/public/") + `${imageName}.png`)
 
     } catch (err) {
         console.error(err);
