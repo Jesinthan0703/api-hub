@@ -9,7 +9,7 @@ import * as path from "path"
 
 export const sendScreenShot = async (req: Request, res: Response): Promise<any> => {
     try {
-        let { url } = req.body
+        let url: any = req.query.url
 
         const browser = await puppeteer.launch({
             args: chrome.args,
