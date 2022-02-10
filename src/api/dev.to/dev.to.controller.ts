@@ -2,7 +2,6 @@ import { Request, Response } from "express"
 import puppeteer from "puppeteer"
 import cheerio from "cheerio"
 import chrome from "chrome-aws-lambda"
-// import { scrollPageToBottom } from "puppeteer-autoscroll-down"
 
 
 interface IArticles {
