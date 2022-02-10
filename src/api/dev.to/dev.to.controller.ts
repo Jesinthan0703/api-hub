@@ -1,7 +1,8 @@
 import { Request, Response } from "express"
 import puppeteer from "puppeteer"
 import cheerio from "cheerio"
-import { scrollPageToBottom } from "puppeteer-autoscroll-down"
+import chrome from "chrome-aws-lambda"
+// import { scrollPageToBottom } from "puppeteer-autoscroll-down"
 
 
 interface IArticles {
@@ -14,6 +15,9 @@ interface IArticles {
 export const getArticle = async (req: Request, res: Response): Promise<object | undefined> => {
     try {
         const browser = await puppeteer.launch({
+            args: chrome.args,
+            executablePath: await chrome.executablePath,
+            headless: chrome.headless,
             defaultViewport: {
                 width: 1920,
                 height: 1080
