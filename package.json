@@ -1,14 +1,14 @@
 {
   "name": "browser-automation",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Collection of APIs for browser automation",
+  "main": "index.ts",
   "scripts": {
     "dev": "nodemon src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Pinto Infant",
   "license": "ISC",
   "dependencies": {
     "cheerio": "^1.0.0-rc.10",
