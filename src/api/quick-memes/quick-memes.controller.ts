@@ -15,7 +15,7 @@ export const getMemes = async (req: Request, res: Response): Promise<object | un
         const browser = await puppeteer.launch({
             args: chrome.args,
             executablePath: await chrome.executablePath,
-            headless: chrome.headless,
+            // headless: chrome.headless,
             defaultViewport: {
                 width: 1920,
                 height: 1080

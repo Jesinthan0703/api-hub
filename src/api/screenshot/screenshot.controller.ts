@@ -9,15 +9,18 @@ import * as path from "path"
 
 export const sendScreenShot = async (req: Request, res: Response): Promise<any> => {
     try {
-        let url: any = req.query.url
+        let url: any = req.query.url || "https://www.pintoinfant.tech"
+        let height: any = req.query.height || "1080"
+        let width: any = req.query.width || "1920"
+        let delay: any = req.query.delay || "0"
 
         const browser = await puppeteer.launch({
             args: chrome.args,
             executablePath: await chrome.executablePath,
-            headless: chrome.headless,
+            // headless: chrome.headless,
             defaultViewport: {
-                width: 3840,
-                height: 2160
+                width: Number(width),
+                height: Number(height)
             }
         });
 
@@ -27,6 +30,8 @@ export const sendScreenShot = async (req: Request, res: Response): Promise<any> 
             waitUntil: 'networkidle2',
             timeout: 0
         });
+
+        await page.waitFor(Number(delay));
 
         await scrollPageToBottom(page, {
             size: 250,
