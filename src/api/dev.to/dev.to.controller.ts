@@ -45,7 +45,7 @@ export const getArticle = async (req: Request, res: Response): Promise<object | 
         $$('.crayons-story').each((index, data) => {
             articles.push({
                 title: $$(data).find('.crayons-story__hidden-navigation-link').text(),
-                link: `https://dev.to/${$$(data).find('.crayons-story__hidden-navigation-link').attr('href')}`,
+                link: `https://dev.to${$$(data).find('.crayons-story__hidden-navigation-link').attr('href')}`,
                 author: $$(data).find('.crayons-story__secondary').text().trim()
             })
         })
