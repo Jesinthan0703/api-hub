@@ -2,7 +2,7 @@ import { Request, Response } from "express"
 import puppeteer from "puppeteer"
 import cheerio from "cheerio"
 import chrome from "chrome-aws-lambda"
-
+import axios, { AxiosResponse } from "axios"
 
 interface IArticles {
     title: string,
@@ -13,22 +13,9 @@ interface IArticles {
 
 export const getArticle = async (req: Request, res: Response): Promise<object | undefined> => {
     try {
-        const browser = await puppeteer.launch({
-            args: chrome.args,
-            executablePath: await chrome.executablePath,
-            // headless: chrome.headless,
-            defaultViewport: {
-                width: 1920,
-                height: 1080
-            }
-        });
-
         // Getting Random Tags
-        const tagPage = await browser.newPage();
-        await tagPage.goto('https://dev.to/tags');
-
-        const tagContent = await tagPage.content();
-        const $ = cheerio.load(tagContent);
+        const tagPage: AxiosResponse = await axios.get("https://dev.to/tags")
+        const $ = cheerio.load(tagPage.data);
         const tags: string[] = []
         $('.tag-card.crayons-card').each((index, data) => {
             tags.push($(data).find('.crayons-tag').text())
@@ -37,10 +24,8 @@ export const getArticle = async (req: Request, res: Response): Promise<object | 
 
         // Getting Random Articles
         let contentPageUrl = `https://dev.to/t/${randomTag}`
-        const contentPage = await browser.newPage();
-        await contentPage.goto(contentPageUrl);
-        let pageContent = await contentPage.content();
-        const $$ = cheerio.load(pageContent);
+        const contentPage: AxiosResponse = await axios.get(contentPageUrl)
+        const $$ = cheerio.load(contentPage.data);
         const articles: IArticles[] = []
         $$('.crayons-story').each((index, data) => {
             articles.push({
@@ -50,23 +35,6 @@ export const getArticle = async (req: Request, res: Response): Promise<object | 
             })
         })
         let randomArticle: IArticles = articles[Math.floor(Math.random() * articles.length)]
-        await browser.close();
-
-
-        //Getting Screenshot of Random Article
-        // let articlePage = await browser.newPage();
-        // await articlePage.goto(randomArticle?.link, {
-        //     waitUntil: 'networkidle2',
-        //     timeout: 0
-        // });
-
-        // await scrollPageToBottom(articlePage, {
-        //     size: 250,
-        //     delay: 200
-        // })
-
-        // await articlePage.waitForSelector('#footer-container')
-        // await articlePage.screenshot({ path: `articles/${randomArticle.title}.png`, fullPage: true });
 
         return res.json({
             status: true,

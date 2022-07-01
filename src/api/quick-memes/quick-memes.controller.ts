@@ -1,7 +1,6 @@
 import { Request, Response } from "express"
-import puppeteer from "puppeteer"
 import cheerio from "cheerio"
-import chrome from "chrome-aws-lambda"
+import axios, { AxiosResponse } from "axios"
 
 
 interface IMemes {
@@ -12,23 +11,10 @@ interface IMemes {
 
 export const getMemes = async (req: Request, res: Response): Promise<object | undefined> => {
     try {
-        const browser = await puppeteer.launch({
-            args: chrome.args,
-            executablePath: await chrome.executablePath,
-            // headless: chrome.headless,
-            defaultViewport: {
-                width: 1920,
-                height: 1080
-            }
-        });
 
-        let randomPage = Math.floor(Math.random() * 1000);
-
-        let page = await browser.newPage();
-        await page.goto(`http://www.quickmeme.com/page/${randomPage}`);
-
-        let content = await page.content();
-        const $ = cheerio.load(content);
+        let randomPage = Math.floor(Math.random() * 1000)
+        let content: AxiosResponse = await axios.get(`http://www.quickmeme.com/page/${randomPage}`)
+        const $ = cheerio.load(content.data);
         const memes: IMemes[] = []
         $(".post").each((index, data) => {
             memes.push({
@@ -37,8 +23,6 @@ export const getMemes = async (req: Request, res: Response): Promise<object | un
                 shareCount: $(data).find(".sharecounts").text().replace(/\s\s+/g, '')
             })
         })
-
-        await browser.close();
         let randomMeme = memes[Math.floor(Math.random() * memes.length)];
         return res.json({
             status: true,
