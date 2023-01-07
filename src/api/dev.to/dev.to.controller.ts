@@ -1,7 +1,5 @@
 import { Request, Response } from "express"
-import puppeteer from "puppeteer"
 import cheerio from "cheerio"
-import chrome from "chrome-aws-lambda"
 import axios, { AxiosResponse } from "axios"
 
 interface IArticles {
@@ -9,7 +7,6 @@ interface IArticles {
     link: string,
     author: string
 }
-
 
 export const getArticle = async (req: Request, res: Response): Promise<object | undefined> => {
     try {

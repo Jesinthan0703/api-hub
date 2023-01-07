@@ -4,7 +4,7 @@
   "description": "Collection of APIs for browser automation",
   "main": "index.ts",
   "scripts": {
-    "dev": "npx nodemon --exec -L ts-node ./src/index.ts",
+    "dev": "npx nodemon -L --exec ts-node ./src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
